@@ -1,0 +1,8 @@
+Commands executed to install environment
+
+conda install conda-forge::omegaconf
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+conda install conda-forge::hydra-core
+conda install conda-forge::flatten-dict
+conda install conda-forge::wandb
+conda install conda-forge::omegaconf
