@@ -1,5 +1,7 @@
 import torch
 
+"""Tests gpu availability and gives information about the gpu types"""
+
 print("GPU Test started")
 print("Cuda available? " + torch.cuda.is_available().__str__())
 num_of_gpus = torch.cuda.device_count()
