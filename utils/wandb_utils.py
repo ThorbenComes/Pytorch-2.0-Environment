@@ -4,9 +4,7 @@ import wandb
 
 
 def create_wandb_sweep_config(configuration):
-    # TODO: switch case for different searches
-    configuration = {"parameters": {"model": {"parameters": translateToWandbParams(configuration)}}, "method": "grid"}
-    return configuration
+    return translateToWandbParams(configuration)
 
 
 def translateToWandbParams(config_dict: dict):
@@ -15,9 +13,12 @@ def translateToWandbParams(config_dict: dict):
     The parameters keyword is added on all parameters, as well as between every layer of nested parameters
     The value keyword is added before any value not specified in the parameters part of the config
     The values keyword is added before any values specified in the parameters part of the config
-    The parameters specified in the parameters part of the config overwrite the
+    The parameters specified in the parameters part of the config overwrite everything
     """
     parameters = config_dict["parameters"]
+
+    wandb_params = dict(config_dict["wandb"])
+
     parameters = add_parameters_keyword(parameters)
 
     params_dict_flat = flatten_dict.flatten(parameters, reducer="dot")
@@ -30,6 +31,7 @@ def translateToWandbParams(config_dict: dict):
             params_dict_flat[key] = {"value": value}
 
     del config_dict["parameters"]
+    del config_dict["wandb"]
 
     config_dict = add_parameters_keyword(config_dict)
     dict_flat = flatten_dict.flatten(config_dict, reducer="dot")
@@ -41,8 +43,9 @@ def translateToWandbParams(config_dict: dict):
     # allows for overwriting of all values
     dict_flat.update(params_dict_flat)
     config = flatten_dict.unflatten(dict_flat, splitter="dot")
-
-    return config
+    out_dict = {"parameters": config}
+    out_dict.update(wandb_params)
+    return out_dict
 
 
 def add_parameters_keyword(config: dict):
