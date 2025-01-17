@@ -1,6 +1,24 @@
 import flatten_dict
 import wandb
+from credentials import wandb_api_key
+from omegaconf import OmegaConf
 """Class offering utilities for weights and biases"""
+
+
+def wandb_init(mode, name, project_name, wandb_login=False):
+
+    if mode:
+        mode = "online"
+    else:
+        mode = "disabled"
+
+    ## Initializing wandb object and sweep object
+    if wandb_login:
+        wandb.login(key=wandb_api_key, relogin=True)
+
+    wandb_run = wandb.init(project=project_name, name=name, mode=mode)
+
+    return wandb_run
 
 
 def create_wandb_sweep_config(configuration):
@@ -19,6 +37,8 @@ def translateToWandbParams(config_dict: dict):
 
     wandb_params = dict(config_dict["wandb"])
 
+    # dataset = dict(config_dict["dataset"])
+
     parameters = add_parameters_keyword(parameters)
 
     params_dict_flat = flatten_dict.flatten(parameters, reducer="dot")
@@ -32,6 +52,7 @@ def translateToWandbParams(config_dict: dict):
 
     del config_dict["parameters"]
     del config_dict["wandb"]
+    # del config_dict["dataset"]
 
     config_dict = add_parameters_keyword(config_dict)
     dict_flat = flatten_dict.flatten(config_dict, reducer="dot")
@@ -45,6 +66,7 @@ def translateToWandbParams(config_dict: dict):
     config = flatten_dict.unflatten(dict_flat, splitter="dot")
     out_dict = {"parameters": config}
     out_dict.update(wandb_params)
+    # out_dict.update({"dataset": dataset})
     return out_dict
 
 
