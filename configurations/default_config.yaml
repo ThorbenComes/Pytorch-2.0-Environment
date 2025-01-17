@@ -1,0 +1,15 @@
+defaults:
+  - dataset: Kitti128_grey
+
+#dataset:
+#  filename: "KITTI_128_simple.pt"
+#  directory: "/experiment_data/datasets/"
+
+wandb:
+  method: "grid"
+  project_name: "debug_project_name"
+  name: "debug_name"
+  logging: True
+
+parameters:
+  lr: 0.001

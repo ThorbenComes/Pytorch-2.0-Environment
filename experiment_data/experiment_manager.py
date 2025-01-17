@@ -2,6 +2,8 @@ import experiment_data.timeseriesExperiment
 import wandb
 import utils.wandb_utils
 import time
+from omegaconf import OmegaConf
+from utils.hydra_utils import unflatten_dict
 
 
 def conduct_experiment(name, project_name, mode):
@@ -15,7 +17,11 @@ def conduct_experiment(name, project_name, mode):
     # initialize experiment
     init_time = time.time()
     print_time(start_time, init_time, "Duration of pre-initialization:")
-    experiment = experiment_type.Experiment()
+
+    # convert dict configuration to namespace object
+    dot_config = OmegaConf.create(unflatten_dict(wandb.config))
+
+    experiment = experiment_type.Experiment(dot_config)
 
     # train model
     train_time = time.time()

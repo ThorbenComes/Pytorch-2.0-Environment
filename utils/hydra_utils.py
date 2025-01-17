@@ -21,3 +21,16 @@ def tabAdder(dict_in, tabs=0):
 
     return repeated_string[1:] + repeated_string.join(out)
 
+
+def unflatten_dict(config: dict):
+    unflattened = {}
+    for key, value in config.items():
+        keys = key.split('.')
+        current = unflattened
+        for k in keys[:-1]:
+            if k not in current:
+                current[k] = {}
+            current = current[k]
+        current[keys[-1]] = value
+    return unflattened
+

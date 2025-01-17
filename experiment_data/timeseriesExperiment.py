@@ -11,10 +11,10 @@ from experiment_data import dataLoader
 
 
 class Experiment:
-    def __init__(self):
-        self.configuration = wandb.config
+    def __init__(self, dot_config):
+        self.configuration = dot_config
         print(self.configuration)
-        # self.data_dict = dataLoader.load(configuration)
+        self.data_dict = dataLoader.load(self.configuration)
 
     def _init(self):
 
