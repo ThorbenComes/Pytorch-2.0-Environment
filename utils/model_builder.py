@@ -1,4 +1,4 @@
-
+# TODO add recurrent inputs and blocks made up of blocks
 
 class block:
     """
