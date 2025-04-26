@@ -5,9 +5,17 @@ import torch
 
 
 def optimizer(configuration, parameters):
-    lr = configuration.lr
-    # TODO: get config right
-    return torch.optim.Adam(parameters, lr = lr)
+    lr = configuration.learning.lr
+    optimizer_type = configuration.learning.type
+    if optimizer_type == "adam":
+        optimizer = torch.optim.Adam(parameters, lr=lr)
+    elif optimizer_type.type == "sgd":
+        optimizer = torch.optim.SGD(parameters, lr=lr)
+    elif optimizer_type.type == "adamw":
+        optimizer = torch.optim.AdamW(parameters, lr=lr)
+    else:
+        raise NotImplementedError("Optimizer {} not implemented".format(optimizer_type))
+    return optimizer
 
 
 def loss_function(configuration):
