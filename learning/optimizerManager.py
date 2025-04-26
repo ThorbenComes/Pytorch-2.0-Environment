@@ -19,12 +19,18 @@ def optimizer(configuration, parameters):
 
 
 def loss_function(configuration):
-    """add custom losses here"""
+    """
+    add custom losses here
+    the loss_args can be used to specify loss function arguments as a dictionary of keyword arguments
+    """
     loss = configuration.loss
+    try:
+        args = configuration.loss_args
+    except AttributeError:
+        args = {}
     if loss == "mse":
-        return torch.nn.MSELoss()
+        return torch.nn.MSELoss(**args)
     elif loss == "crossentropy":
-        # TODO add reduction?
-        return torch.nn.CrossEntropyLoss
+        return torch.nn.CrossEntropyLoss(**args)
     else:
-        raise NotImplementedError
+        raise NotImplementedError("Loss {} not implemented".format(loss))
